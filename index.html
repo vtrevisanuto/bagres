@@ -20,6 +20,7 @@
         .teams-container { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
         .team { background: white; padding: 15px; margin: 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); width: 250px; }
         .team h3 { margin: 0; color: #007bff; }
+        #copiar-times { background: #28a745; /* Verde para diferenciar do botão principal */ margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -36,6 +37,9 @@
             <p id="warning-message" class="warning">Selecione pelo menos 10 jogadores!</p>
         </div>
         <div id="times" class="teams-container"></div>
+        <div class="button-container">
+            <button id="copiar-times" onclick="copiarTimes()">Copiar Times</button>
+        </div>
     </div>
 
     <script>
@@ -121,6 +125,25 @@
                 let div = `<div class="team"><h3>Time ${index + 1}</h3><p>Média (${media})</p>` +
                     time.map(j => `<p>${j.nome}</p>`).join("") + "</div>";
                 container.innerHTML += div;
+            });
+        }
+
+        function copiarTimes() {
+            let container = document.getElementById("times");
+            let texto = "Times Gerados:\n\n";
+        
+            // Pegando os times e seus jogadores
+            container.querySelectorAll('.team').forEach((team, index) => {
+                let teamName = team.querySelector('h3').textContent; // Nome do time
+                let players = Array.from(team.querySelectorAll('p')).slice(1).map(p => p.textContent).join("\n"); // Jogadores
+                texto += `${teamName}\n${players}\n\n`;
+            });
+        
+            // Copiando o texto para o clipboard
+            navigator.clipboard.writeText(texto).then(() => {
+                alert("Times copiados para o clipboard!");
+            }).catch(err => {
+                console.error('Erro ao copiar: ', err);
             });
         }
 
