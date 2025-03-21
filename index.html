@@ -57,10 +57,19 @@
             let container = document.getElementById("player-list");
             container.innerHTML = "";
             jogadores.forEach((jogador, index) => {
-                let checkbox = `<div>
-                                <input type="checkbox" id="player-${index}" value="${index}" checked onchange="verificarSelecao()">
-                                <label for="player-${index}">${jogador.nome}</label><div>`;
-                container.innerHTML += checkbox;
+                // Criando a div que irá envolver o checkbox e a label
+                let divItem = document.createElement("div");
+                divItem.classList.add("player-item");
+        
+                // Gerando a checkbox e a label
+                let checkbox = `<input type="checkbox" id="player-${index}" value="${index}" checked onchange="verificarSelecao()">
+                                <label for="player-${index}">${jogador.nome}</label>`;
+        
+                // Adicionando o conteúdo gerado à div
+                divItem.innerHTML = checkbox;
+        
+                // Adicionando a div ao container
+                container.appendChild(divItem);
             });
             verificarSelecao();
         }
