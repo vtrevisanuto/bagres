@@ -21,6 +21,8 @@
         .team { background: white; padding: 15px; margin: 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); width: 250px; }
         .team h3 { margin: 0; color: #007bff; }
         #copiar-times { background: #28a745; /* Verde para diferenciar do botão principal */ margin-top: 15px; }
+        #copiar-times:disabled { background: #6c757d; /* Cor cinza para indicar que está desabilitado */ cursor: not-allowed;}
+        .success-message {color: green; /* Cor verde para indicar sucesso */ font-weight: bold; margin-top: 10px; display: none; /* Inicialmente oculta */}
     </style>
 </head>
 <body>
@@ -38,8 +40,9 @@
         </div>
         <div id="times" class="teams-container"></div>
         <div class="button-container">
-            <button id="copiar-times" onclick="copiarTimes()">Copiar Times</button>
-        </div>
+          	<button id="copiar-times" onclick="copiarTimes()" disabled>Copiar Times</button>
+            <p id="success-message" class="success-message" style="display: none;">Times copiados para o clipboard!</p>
+      	</div>
     </div>
 
     <script>
@@ -115,6 +118,9 @@
                 }
             }
             exibirTimes(times);
+            
+            // Habilitar o botão "Copiar Times" após gerar os times
+    		document.getElementById("copiar-times").disabled = false;
         }
 
         function exibirTimes(times) {
@@ -131,17 +137,18 @@
         function copiarTimes() {
             let container = document.getElementById("times");
             let texto = "Times Gerados:\n\n";
-        
+
             // Pegando os times e seus jogadores
             container.querySelectorAll('.team').forEach((team, index) => {
                 let teamName = team.querySelector('h3').textContent; // Nome do time
                 let players = Array.from(team.querySelectorAll('p')).slice(1).map(p => p.textContent).join("\n"); // Jogadores
                 texto += `${teamName}\n${players}\n\n`;
             });
-        
+
             // Copiando o texto para o clipboard
             navigator.clipboard.writeText(texto).then(() => {
-                alert("Times copiados para o clipboard!");
+                // Exibir a mensagem de sucesso abaixo do botão
+                document.getElementById("success-message").style.display = "block";
             }).catch(err => {
                 console.error('Erro ao copiar: ', err);
             });
