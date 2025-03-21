@@ -23,6 +23,10 @@
         #copiar-times { background: #28a745; /* Verde para diferenciar do botão principal */ margin-top: 15px; }
         #copiar-times:disabled { background: #6c757d; /* Cor cinza para indicar que está desabilitado */ cursor: not-allowed;}
         .success-message {color: green; /* Cor verde para indicar sucesso */ font-weight: bold; margin-top: 10px; display: none; /* Inicialmente oculta */}
+        .input-container { margin-bottom: 20px; text-align: center; }
+        #input-jogadores { width: 80%; margin: 10px 0; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px; }
+        #processar-jogadores { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        #processar-jogadores:disabled { background: #6c757d; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -32,6 +36,12 @@
             <h3>Montador de times</h3>
         </div>
         <h3><i style="margin-right: 8px;" class="fa-solid fa-user-check icon-bagres"></i>Selecione os bagres que irão jogar</h3>
+        <div class="input-container">
+          <textarea id="input-jogadores" rows="10" cols="50" placeholder="Cole a lista de jogadores aqui para selecionar automaticamente, um por linha:
+- Jogador 1
+- Jogador 2"></textarea>
+          <button style="margin: 8px 0px 24px 0px"id="processar-jogadores" onclick="processarJogadores()" disabled>Selecionar automaticamente</button>
+      </div>
         <input style="margin-bottom: 24px;" type="checkbox" id="select-all" onclick="toggleSelecionarTodos()" checked> Selecionar Todos
         <div class="player-list" id="player-list"></div>
         <div class="button-container">
@@ -155,6 +165,43 @@
         }
 
         document.addEventListener("DOMContentLoaded", carregarJogadores);
+        function processarJogadores() {
+            const texto = document.getElementById("input-jogadores").value.trim();
+
+            if (texto === "") {
+                alert("Por favor, cole a lista de jogadores no campo de texto.");
+                return;
+                const botaoProcessar = document.getElementById("processar-jogadores");
+            }
+
+            // Dividindo a lista de jogadores em um array
+            const nomesColados = texto.split("\n").map(nome => nome.trim().toLowerCase());
+
+            // Percorrendo os jogadores e comparando com a lista colada
+            jogadores.forEach((jogador, index) => {
+                const nomeJogadorBase = jogador.nome.toLowerCase();
+
+                // Verifica se o nome do jogador está na lista colada
+                if (nomesColados.some(nome => nome.includes(nomeJogadorBase))) {
+                    // Se o nome do jogador estiver na lista, selecione a checkbox
+                    document.getElementById(`player-${index}`).checked = true;
+                } else {
+                    // Se o nome não estiver na lista, desmarque a checkbox
+                    document.getElementById(`player-${index}`).checked = false;
+                }
+            });
+
+            // Habilitar o botão para montar os times
+            document.getElementById("gerar-times").disabled = false;
+        }
+        
+        document.getElementById("input-jogadores").addEventListener("input", function() {
+            const texto = this.value.trim();
+            const botaoProcessar = document.getElementById("processar-jogadores");
+
+            // Se o campo de texto não estiver vazio, habilita o botão
+            botaoProcessar.disabled = texto === "";
+        });
     </script>
 </body>
 </html>
