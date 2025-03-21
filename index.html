@@ -10,7 +10,7 @@
         .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
         .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 2px solid #ddd; }
         .header h1 { color: #007bff; margin: 0; flex-wrap: wrap;}
-        .player-list { text-align: left; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px !important;}
+        .player-list { text-align: left; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;}
         .player-list label { margin: 0px; padding: 5px 10px; border-radius: 5px; background: #e9ecef; cursor: pointer; display: inline-flex; align-items: center; }
         .player-list input { margin: 0px; vertical-align: middle; }
         .button-container { margin-top: 15px; }
@@ -30,7 +30,7 @@
             <h1><i class="fa-solid fa-futbol"></i> Club Bagre</h1>
             <h3>Montador de times</h3>
         </div>
-        <h3><i class="fa-solid fa-user-check icon-bagres"></i>Selecione os bagres que irão jogar</h3>
+        <h3><i class="fa-solid fa-user-check"></i>Selecione os bagres que irão jogar</h3>
         <input style="margin-bottom: 24px;" type="checkbox" id="select-all" onclick="toggleSelecionarTodos()" checked> Selecionar Todos
         <div class="player-list" id="player-list"></div>
         <div class="button-container">
