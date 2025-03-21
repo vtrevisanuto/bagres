@@ -14,7 +14,7 @@
         .player-list label { margin: 0px; padding: 5px 10px; border-radius: 5px; background: #e9ecef; cursor: pointer; display: inline-flex; align-items: center; }
         .player-list input { margin: 0px; vertical-align: middle; }
         .button-container { margin-top: 15px; }
-        button { margin-top: 40px !important; background: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button { margin-top: 40px; background: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
         button:disabled { background: #6c757d; cursor: not-allowed; }
         .warning { color: red; font-weight: bold; display: none; margin-top: 10px; }
         .teams-container { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
@@ -32,7 +32,7 @@
         <input style="margin-bottom: 24px;" type="checkbox" id="select-all" onclick="toggleSelecionarTodos()" checked> Selecionar Todos
         <div class="player-list" id="player-list"></div>
         <div class="button-container">
-            <button style="margin-top: 40px !important;" id="gerar-times" onclick="gerarTimes()" disabled>Montar times</button>
+            <button id="gerar-times" onclick="gerarTimes()" disabled>Montar times</button>
             <p id="warning-message" class="warning">Selecione pelo menos 10 jogadores!</p>
         </div>
         <div id="times" class="teams-container"></div>
