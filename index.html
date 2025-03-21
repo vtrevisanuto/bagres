@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club Bagre - Montador de Times</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; background-color: #f8f9fa; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 2px solid #ddd; }
+        .header h1 { color: #007bff; margin: 0; }
+        .player-list { text-align: left; display: flex; flex-wrap: wrap; justify-content: center; }
+        .player-list label { margin: 5px; padding: 5px 10px; border-radius: 5px; background: #e9ecef; cursor: pointer; }
+        .player-list input { margin-right: 5px; }
+        .button-container { margin-top: 15px; }
+        button { background: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:disabled { background: #6c757d; cursor: not-allowed; }
+        .warning { color: red; font-weight: bold; display: none; margin-top: 10px; }
+        .teams-container { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+        .team { background: white; padding: 15px; margin: 10px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); width: 250px; }
+        .team h3 { margin: 0; color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fa-solid fa-futbol"></i> Club Bagre</h1>
+            <h2>Montador de times</h2>
+        </div>
+        <h3><i class="fa-solid fa-user-check"></i> Selecione os bagres que irão jogar</h3>
+        <input type="checkbox" id="select-all" onclick="toggleSelecionarTodos()" checked> Selecionar Todos
+        <div class="player-list" id="player-list"></div>
+        <div class="button-container">
+            <button id="gerar-times" onclick="gerarTimes()" disabled>Montar times</button>
+            <p id="warning-message" class="warning">Selecione pelo menos 10 jogadores!</p>
+        </div>
+        <div id="times" class="teams-container"></div>
+    </div>
+
+    <script>
+        const jogadores = [
+            { nome: "Ambrósio", nota: 5 }, { nome: "Blanco", nota: 2.5 },
+            { nome: "Doug", nota: 2 }, { nome: "Dô", nota: 2 },
+            { nome: "Fecas", nota: 3.5 }, { nome: "Gabriel", nota: 3 },
+            { nome: "Henrique Corinthians", nota: 5 }, { nome: "Juca", nota: 5 },
+            { nome: "Leal", nota: 5 }, { nome: "Luiz", nota: 5 },
+            { nome: "Lucca", nota: 2 }, { nome: "Marquinhos", nota: 4.5 },
+            { nome: "Moro", nota: 3.5 }, { nome: "Munari", nota: 4.5 },
+            { nome: "Murilo", nota: 4 }, { nome: "Negão", nota: 4 },
+            { nome: "Pedro", nota: 4.5 }, { nome: "Putini", nota: 3.5 },
+            { nome: "Stuart", nota: 3 }, { nome: "Vitão", nota: 3 },
+            { nome: "Zé", nota: 5 }, { nome: "Zinho", nota: 3 }
+        ];
+
+        function carregarJogadores() {
+            let container = document.getElementById("player-list");
+            container.innerHTML = "";
+            jogadores.forEach((jogador, index) => {
+                let checkbox = `<input type="checkbox" id="player-${index}" value="${index}" checked onchange="verificarSelecao()">
+                                <label for="player-${index}">${jogador.nome}</label>`;
+                container.innerHTML += checkbox;
+            });
+            verificarSelecao();
+        }
+
+        function toggleSelecionarTodos() {
+            let selectAll = document.getElementById("select-all").checked;
+            document.querySelectorAll(".player-list input[type='checkbox']").forEach(checkbox => {
+                checkbox.checked = selectAll;
+            });
+            verificarSelecao();
+        }
+
+        function verificarSelecao() {
+            let selecionados = document.querySelectorAll(".player-list input:checked").length;
+            let botao = document.getElementById("gerar-times");
+            let aviso = document.getElementById("warning-message");
+            botao.disabled = selecionados < 10;
+            aviso.style.display = selecionados < 10 ? "block" : "none";
+        }
+
+        function gerarTimes() {
+            let selecionados = Array.from(document.querySelectorAll(".player-list input:checked"))
+                .map(cb => jogadores[cb.value]);
+            let jogadoresEmbaralhados = [...selecionados].sort(() => Math.random() - 0.5);
+            let times = [];
+            let numTimes = Math.floor(selecionados.length / 5);
+            let notasTimes = Array(numTimes).fill(0);
+            jogadoresEmbaralhados.sort((a, b) => b.nota - a.nota);
+
+            for (let jogador of jogadoresEmbaralhados) {
+                let menorTime = notasTimes.indexOf(Math.min(...notasTimes));
+                if (!times[menorTime]) times[menorTime] = [];
+                if (times[menorTime].length < 5) {
+                    times[menorTime].push(jogador);
+                    notasTimes[menorTime] += jogador.nota;
+                } else {
+                    if (!times[numTimes]) times[numTimes] = [];
+                    times[numTimes].push(jogador);
+                }
+            }
+            exibirTimes(times);
+        }
+
+        function exibirTimes(times) {
+            let container = document.getElementById("times");
+            container.innerHTML = "";
+            times.forEach((time, index) => {
+                let media = (time.reduce((sum, j) => sum + j.nota, 0) / time.length).toFixed(2);
+                let div = `<div class="team"><h3>Time ${index + 1}</h3><p>Média (${media})</p>` +
+                    time.map(j => `<p>${j.nome}</p>`).join("") + "</div>";
+                container.innerHTML += div;
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", carregarJogadores);
+    </script>
+</body>
+</html>
