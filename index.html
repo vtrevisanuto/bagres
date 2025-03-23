@@ -57,17 +57,27 @@
 
     <script>
         const jogadores = [
-            { nome: "Ambrósio", nota: 5 }, { nome: "Blanco", nota: 2.5 },
-            { nome: "Doug", nota: 2 }, { nome: "Dô", nota: 2 },
-            { nome: "Fecas", nota: 3.5 }, { nome: "Gabriel", nota: 3 },
-            { nome: "Henrique Corinthians", nota: 5 }, { nome: "Juca", nota: 5 },
-            { nome: "Leal", nota: 5 }, { nome: "Luiz", nota: 5 },
-            { nome: "Lucca", nota: 2 }, { nome: "Marquinhos", nota: 4.5 },
-            { nome: "Moro", nota: 3.5 }, { nome: "Munari", nota: 4.5 },
-            { nome: "Murilo", nota: 4 }, { nome: "Negão", nota: 4 },
-            { nome: "Pedro", nota: 4.5 }, { nome: "Putini", nota: 3.5 },
-            { nome: "Stuart", nota: 3 }, { nome: "Vitão", nota: 3 },
-            { nome: "Zé", nota: 5 }, { nome: "Zinho", nota: 3 }
+            { nome: "Ambrósio", apelidos: ["Ambrosio"], nota: 5 }, 
+            { nome: "Blanco", apelidos: [], nota: 2.5 },
+            { nome: "Doug", apelidos: ["Douglas"], nota: 2 }, 
+            { nome: "Fecas", apelidos: [], nota: 3.5 }, 
+            { nome: "Gabriel", apelidos: [], nota: 3 },
+            { nome: "Henrique Corinthians", apelidos: ["Henrique", "Corinthians"], nota: 5 }, 
+            { nome: "Juca", apelidos: [], nota: 5 },
+            { nome: "Leal", apelidos: [], nota: 5 }, 
+            { nome: "Luiz", apelidos: [], nota: 5 },
+            { nome: "Lucca", apelidos: [], nota: 2 }, 
+            { nome: "Marquinhos", apelidos: ["Marcos", "Marcos Bravo"], nota: 4.5 },
+            { nome: "Moro", apelidos: [], nota: 3.5 }, 
+            { nome: "Munari", apelidos: [], nota: 4.5 },
+            { nome: "Murilo", apelidos: [], nota: 4 }, 
+            { nome: "Negão", apelidos: ["Nego"], nota: 4 },
+            { nome: "Pedro", apelidos: [], nota: 4.5 }, 
+            { nome: "Putini", apelidos: ["Gabriel Putini"], nota: 3.5 },
+            { nome: "Stuart", apelidos: [], nota: 3 }, 
+            { nome: "Vitão", apelidos: ["Vitor"], nota: 3 },
+            { nome: "Zé", apelidos: ["Ze", "Olivo"], nota: 5 }, 
+            { nome: "Zinho", apelidos: [], nota: 3 }
         ];
 
         function carregarJogadores() {
@@ -165,36 +175,32 @@
         }
 
         document.addEventListener("DOMContentLoaded", carregarJogadores);
-        function processarJogadores() {
+        function processarJogadores() { 
             const texto = document.getElementById("input-jogadores").value.trim();
 
             if (texto === "") {
                 alert("Por favor, cole a lista de jogadores no campo de texto.");
                 return;
-                const botaoProcessar = document.getElementById("processar-jogadores");
             }
 
-            // Dividindo a lista de jogadores em um array
+            // Dividindo a lista de jogadores em um array normalizado
             const nomesColados = texto.split("\n").map(nome => nome.trim().toLowerCase());
 
             // Percorrendo os jogadores e comparando com a lista colada
             jogadores.forEach((jogador, index) => {
                 const nomeJogadorBase = jogador.nome.toLowerCase();
+                const apelidos = jogador.apelidos ? jogador.apelidos.map(a => a.toLowerCase()) : [];
 
-                // Verifica se o nome do jogador está na lista colada
-                if (nomesColados.some(nome => nome.includes(nomeJogadorBase))) {
-                    // Se o nome do jogador estiver na lista, selecione a checkbox
+                // Verifica se o nome ou um dos apelidos está na lista colada
+                if (nomesColados.some(nome => nome.includes(nomeJogadorBase) || apelidos.some(apelido => nome.includes(apelido)))) {
                     document.getElementById(`player-${index}`).checked = true;
                 } else {
-                    // Se o nome não estiver na lista, desmarque a checkbox
                     document.getElementById(`player-${index}`).checked = false;
                 }
             });
 
-            // Habilitar o botão para montar os times
-            document.getElementById("gerar-times").disabled = false;
+            verificarSelecao();
         }
-        
         document.getElementById("input-jogadores").addEventListener("input", function() {
             const texto = this.value.trim();
             const botaoProcessar = document.getElementById("processar-jogadores");
