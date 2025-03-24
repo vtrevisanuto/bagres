@@ -42,11 +42,9 @@
 - Jogador 2"></textarea>
           <button style="margin: 8px 0px 24px 0px"id="processar-jogadores" onclick="processarJogadores()" disabled>Selecionar automaticamente</button>
         </div>
-        <hr style="height:1px;border-width:0;color:lightgray;background-color:lightgray">
         <input style="margin-bottom: 24px;" type="checkbox" id="select-all" onclick="toggleSelecionarTodos()" checked> Selecionar Todos
         <div class="player-list" id="player-list"></div>
         <!-- Adicionar campos de entrada e botão -->
-        <hr style="height:1px;border-width:0;color:lightgray;background-color:lightgray">
     <div class="input-container">
         <input type="text" id="novo-jogador-nome" placeholder="Nome do jogador" oninput="verificarCamposAvulso()"
             style="width: 45%; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px;">
@@ -58,7 +56,6 @@
 
         <p id="erro-nota" style="color: red; font-weight: bold; display: none; margin-top: 5px;">Insira uma nota entre 1 e 5</p>
     </div>
-        <hr style="height:1px;border-width:0;color:lightgray;background-color:lightgray">
         <div class="button-container">
             <button id="gerar-times" onclick="gerarTimes()" disabled>Montar times</button>
             <p id="warning-message" class="warning">Selecione pelo menos 10 jogadores!</p>
