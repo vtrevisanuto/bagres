@@ -9,7 +9,7 @@
         body { font-family: Arial, sans-serif; text-align: center; margin: 20px; background-color: #f8f9fa; }
         .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
         .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 2px solid #ddd; }
-        .header h1 { color: #007bff; margin: 0; flex-wrap: wrap;}
+        .header h1 { color: #007bff; margin: 0px; flex-wrap: wrap;}
         .player-list { text-align: left; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;}
         .player-list label { margin: 0px; padding: 5px 10px; border-radius: 5px; background: #e9ecef; cursor: pointer; display: inline-flex; align-items: center; }
         .player-list input { margin: 0px; vertical-align: middle; }
@@ -34,6 +34,7 @@
     	@media (max-width: 600px) {
         .adicionar-avulso-container {flex-direction: column; align-items: stretch;}
         .adicionar-avulso-container input {width: 100%; /* Ocupa toda a largura no mobile */}
+        .header {flex-direction: column; align-items: stretch; gap: 0px;}
     }
     </style>
 </head>
