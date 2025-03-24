@@ -53,7 +53,7 @@
         </div>
         <input style="margin-bottom: 24px;" type="checkbox" id="select-all" onclick="toggleSelecionarTodos()" checked> Selecionar Todos
         <div class="player-list" id="player-list"></div>
-        <br><br><hr 2px solid #ddd><br><h3>Adicionar avulso</h3>
+        <br><br><hr 2px solid #ddd><br><h3>Adicionar outro jogador</h3>
         <!-- Adicionar campos de entrada e botão -->
     	<div class="adicionar-avulso-container">
         <input type="text" id="novo-jogador-nome" placeholder="Nome do bagre" oninput="verificarCamposAvulso()" style="box-sizing: border-box; width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px;">
@@ -61,7 +61,7 @@
         <input type="number" id="novo-jogador-nota" placeholder="Nota (1 a 5)" min="1" max="5" step="0.1"
             oninput="verificarCamposAvulso()" style="box-sizing: border-box; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px;">
 
-        <button style="margin: 0px; width: 100%" id="adicionar-avulso" onclick="adicionarJogadorAvulso()" disabled>Adicionar avulso</button>
+        <button style="margin: 0px; width: 100%" id="adicionar-avulso" onclick="adicionarJogadorAvulso()" disabled>Adicionar</button>
     </div>
 	<p id="erro-nota" style="color: red; font-weight: bold; display: none; margin-top: 5px;">Insira uma nota entre 1 e 5</p>
     <br><br><br><hr>
