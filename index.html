@@ -27,6 +27,13 @@
         #input-jogadores { width: 80%; margin: 10px 0; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px; }
         #processar-jogadores { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
         #processar-jogadores:disabled { background: #6c757d; cursor: not-allowed; }
+        .adicionar-avulso-container { display: inline-flex; width:100%; gap: 10px; justify-content: center; align-items: center; margin-top: 20px; flex-wrap: wrap; /* Garante que os itens quebrem linha quando necessário */ }
+		.adicionar-avulso-container input {padding: 8px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px;}
+		/* No mobile, os inputs ficam um abaixo do outro */
+    	@media (max-width: 600px) {
+        .adicionar-avulso-container {flex-direction: column; align-items: stretch;}
+        .adicionar-avulso-container input {width: 100%; /* Ocupa toda a largura no mobile */}
+    }
     </style>
 </head>
 <body>
@@ -45,14 +52,13 @@
         <input style="margin-bottom: 24px;" type="checkbox" id="select-all" onclick="toggleSelecionarTodos()" checked> Selecionar Todos
         <div class="player-list" id="player-list"></div>
         <!-- Adicionar campos de entrada e botão -->
-    <div class="input-container">
-        <input type="text" id="novo-jogador-nome" placeholder="Nome do jogador" oninput="verificarCamposAvulso()"
-            style="width: 45%; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px;">
+    <div class="adicionar-avulso-container">
+        <input type="text" id="novo-jogador-nome" placeholder="Nome do bagre" oninput="verificarCamposAvulso()" style="box-sizing: border-box; width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px;">
 
         <input type="number" id="novo-jogador-nota" placeholder="Nota (1 a 5)" min="1" max="5" step="0.1"
-            oninput="verificarCamposAvulso()" style="width: 20%; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px;">
+            oninput="verificarCamposAvulso()" style="box-sizing: border-box; padding: 10px; font-size: 16px; border: 1px solid #ddd; border-radius: 5px;">
 
-        <button id="adicionar-avulso" onclick="adicionarJogadorAvulso()" disabled>Adicionar avulso</button>
+        <button style="margin: 0px; width: 100%" id="adicionar-avulso" onclick="adicionarJogadorAvulso()" disabled>Adicionar avulso</button>
 
         <p id="erro-nota" style="color: red; font-weight: bold; display: none; margin-top: 5px;">Insira uma nota entre 1 e 5</p>
     </div>
@@ -61,10 +67,11 @@
             <p id="warning-message" class="warning">Selecione pelo menos 10 jogadores!</p>
         </div>
         <div id="times" class="teams-container"></div>
-        <div class="button-container">
-          	<button id="copiar-times" onclick="copiarTimes()" disabled>Copiar Times</button>
+        <!-- Botão Copiar Times (agora começa oculto) -->
+        <div class="button-container" id="container-copiar-times" style="display: none;">
+            <button id="copiar-times" onclick="copiarTimes()" disabled>Copiar Times</button>
             <p id="success-message" class="success-message" style="display: none;">Times copiados para o clipboard!</p>
-      	</div>
+        </div>
     </div>
 
     <script>
@@ -151,8 +158,11 @@
             }
             exibirTimes(times);
             
-            // Habilitar o botão "Copiar Times" após gerar os times
-    		document.getElementById("copiar-times").disabled = false;
+            // Exibe o botão copiar times e habilita se houver times
+            let botaoCopiar = document.getElementById("copiar-times");
+            let containerBotao = document.getElementById("container-copiar-times");
+            containerBotao.style.display = "block"; // Exibe o botão
+            botaoCopiar.disabled = times.length === 0; // Habilita o botão apenas se houver times
         }
 
         function exibirTimes(times) {
