@@ -147,31 +147,47 @@
         function gerarTimes() {
             let selecionados = Array.from(document.querySelectorAll(".player-list input:checked"))
                 .map(cb => jogadores[cb.value]);
-            let jogadoresEmbaralhados = [...selecionados].sort(() => Math.random() - 0.5);
-            let times = [];
-            let numTimes = Math.floor(selecionados.length / 5);
-            let notasTimes = Array(numTimes).fill(0);
-            jogadoresEmbaralhados.sort((a, b) => b.nota - a.nota);
 
-            for (let jogador of jogadoresEmbaralhados) {
+            let jogadoresEmbaralhados = [...selecionados].sort(() => Math.random() - 0.5);
+
+            let times = [];
+            let numTimes = Math.floor(selecionados.length / 5); // Número de times que podem ser formados
+            let notasTimes = Array(numTimes).fill(0);
+
+            // Adiciona os dois primeiros times com 5 jogadores
+            let time1 = jogadoresEmbaralhados.splice(0, 5);
+            let time2 = jogadoresEmbaralhados.splice(0, 5);
+
+            times.push(time1);
+            times.push(time2);
+
+            // Preenche os times restantes com jogadores restantes (sem exceder 5 jogadores por time)
+            jogadoresEmbaralhados.forEach(jogador => {
+                // Encontrar o time com menos jogadores (sem ultrapassar 5 jogadores por time)
                 let menorTime = notasTimes.indexOf(Math.min(...notasTimes));
-                if (!times[menorTime]) times[menorTime] = [];
+
+                // Se o time ainda tiver menos de 5 jogadores, adiciona o jogador
                 if (times[menorTime].length < 5) {
                     times[menorTime].push(jogador);
                     notasTimes[menorTime] += jogador.nota;
-                } else {
-                    if (!times[numTimes]) times[numTimes] = [];
-                    times[numTimes].push(jogador);
                 }
+            });
+
+            // Se sobrar jogadores (menos de 5), coloca no time extra
+            if (jogadoresEmbaralhados.length > 0) {
+                times.push(jogadoresEmbaralhados);
             }
+
             exibirTimes(times);
-            
+
             // Exibe o botão copiar times e habilita se houver times
             let botaoCopiar = document.getElementById("copiar-times");
             let containerBotao = document.getElementById("container-copiar-times");
             containerBotao.style.display = "block"; // Exibe o botão
             botaoCopiar.disabled = times.length === 0; // Habilita o botão apenas se houver times
         }
+
+
 
         function exibirTimes(times) {
             let container = document.getElementById("times");
