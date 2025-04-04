@@ -51,7 +51,7 @@
 - Jogador 2"></textarea>
           <button style="margin: 8px 0px 24px 0px"id="processar-jogadores" onclick="processarJogadores()" disabled>Selecionar automaticamente</button>
         </div>
-        <input style="margin-bottom: 24px;" type="checkbox" id="select-all" onclick="toggleSelecionarTodos()" checked> Selecionar Todos
+        <input style="margin-bottom: 24px;" type="checkbox" id="select-all" onclick="toggleSelecionarTodos()"> Selecionar Todos
         <div class="player-list" id="player-list"></div>
         <br><br><hr 2px solid #ddd><br><h3>Adicionar outro bagre</h3>
         <!-- Adicionar campos de entrada e botão -->
@@ -107,26 +107,39 @@
 	    { nome: "Luquinhas", apelidos: [], nota: 5 }
         ];
 
-        function carregarJogadores() {
-            let container = document.getElementById("player-list");
-            container.innerHTML = "";
-            jogadores.forEach((jogador, index) => {
-                // Criando a div que irá envolver o checkbox e a label
-                let divItem = document.createElement("div");
-                divItem.classList.add("player-item");
-        
-                // Gerando a checkbox e a label
-                let checkbox = `<input type="checkbox" id="player-${index}" value="${index}" checked onchange="verificarSelecao()">
-                                <label for="player-${index}">${jogador.nome}</label>`;
-        
-                // Adicionando o conteúdo gerado à div
-                divItem.innerHTML = checkbox;
-        
-                // Adicionando a div ao container
-                container.appendChild(divItem);
-            });
-            verificarSelecao();
-        }
+function carregarJogadores() {
+    const container = document.getElementById("player-list");
+    
+    // Salva os índices dos jogadores que estão selecionados
+    const selecionados = Array.from(document.querySelectorAll(".player-list input[type='checkbox']"))
+        .filter(cb => cb.checked)
+        .map(cb => parseInt(cb.value));
+
+    container.innerHTML = "";
+
+    jogadores.forEach((jogador, index) => {
+        // Criação do checkbox
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `player-${index}`;
+        checkbox.value = index;
+        checkbox.checked = selecionados.includes(index); // Restaura a seleção anterior
+        checkbox.onchange = verificarSelecao;
+
+        const label = document.createElement("label");
+        label.setAttribute("for", `player-${index}`);
+        label.textContent = jogador.nome;
+
+        const divItem = document.createElement("div");
+        divItem.classList.add("player-item");
+        divItem.appendChild(checkbox);
+        divItem.appendChild(label);
+
+        container.appendChild(divItem);
+    });
+
+    verificarSelecao();
+}
 
         function toggleSelecionarTodos() {
             let selectAll = document.getElementById("select-all").checked;
@@ -271,29 +284,37 @@
             }
         }
 
-        function adicionarJogadorAvulso() {
-            const nome = document.getElementById("novo-jogador-nome").value.trim();
-            const nota = parseFloat(document.getElementById("novo-jogador-nota").value.trim());
+function adicionarJogadorAvulso() {
+    const nome = document.getElementById("novo-jogador-nome").value.trim();
+    const nota = parseFloat(document.getElementById("novo-jogador-nota").value.trim());
 
-            // Validação final antes de adicionar o jogador
-            if (nome === "" || isNaN(nota) || nota < 1 || nota > 5) {
-                alert("Por favor, insira um nome válido e uma nota entre 1 e 5.");
-                return;
-            }
+    if (nome === "" || isNaN(nota) || nota < 1 || nota > 5) {
+        alert("Por favor, insira um nome válido e uma nota entre 1 e 5.");
+        return;
+    }
 
-            // Adiciona o novo jogador à lista
-            jogadores.push({ nome, nota });
+    // Adiciona o novo jogador à lista
+    jogadores.push({ nome, nota });
 
-            // Atualiza a lista exibida
-            carregarJogadores();
+    // Atualiza a lista exibida
+    carregarJogadores();
 
-            // Limpa os campos após adicionar
-            document.getElementById("novo-jogador-nome").value = "";
-            document.getElementById("novo-jogador-nota").value = "";
+    // Marca automaticamente o novo jogador como selecionado
+    const novoIndex = jogadores.length - 1;
+    const checkboxNovoJogador = document.getElementById(`player-${novoIndex}`);
+    if (checkboxNovoJogador) {
+        checkboxNovoJogador.checked = true;
+    }
 
-            // Desabilita o botão novamente e esconde a mensagem de erro
-            verificarCamposAvulso();
-        }
+    verificarSelecao();
+
+    // Limpa os campos após adicionar
+    document.getElementById("novo-jogador-nome").value = "";
+    document.getElementById("novo-jogador-nota").value = "";
+
+    // Desabilita o botão novamente e esconde a mensagem de erro
+    verificarCamposAvulso();
+}
     </script>
 </body>
 </html>
